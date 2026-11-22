@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Fornecedores{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Fornecedores</h1>
+  <a href="{{ url_for('cadastros.fornecedor_novo') }}" class="btn btn-primary">Novo</a>
+</div>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-sm mb-0 align-middle">
+      <thead class="table-light">
+        <tr><th>Razão social</th><th>Fantasia</th><th>Telefone</th><th>Pontos</th><th>Frequente</th><th>Ativo</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+        <tr>
+          <td>{{ r.razao_social }}</td>
+          <td>{{ r.nome_fantasia or '—' }}</td>
+          <td>{{ r.telefone or '—' }}</td>
+          <td>{{ r.n_pontos }}</td>
+          <td>{{ 'Sim' if r.frequente else 'Não' }}</td>
+          <td>{{ 'Sim' if r.ativo else 'Não' }}</td>
+          <td class="text-end">
+            <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('cadastros.fornecedor_editar', fid=r.id) }}">Editar</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-3">Nenhum fornecedor.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<a href="{{ url_for('cadastros.index') }}" class="btn btn-link mt-3">← Voltar</a>
+{% endblock %}

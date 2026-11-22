@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if row else 'Novo' }} motorista{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">{{ 'Editar motorista' if row else 'Novo motorista' }}</h1>
+<form method="post" class="col-md-6">
+  <input type="hidden" name="csrf_token" value="{{ csrf }}">
+  <div class="mb-3">
+    <label class="form-label">Nome *</label>
+    <input name="nome" class="form-control" required value="{{ row.nome if row else '' }}">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Tipo *</label>
+    <select name="tipo" class="form-select" required>
+      {% for t in tipos %}
+      <option value="{{ t }}" {% if row and row.tipo == t %}selected{% endif %}>{{ t }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="row">
+    <div class="col mb-3">
+      <label class="form-label">CPF</label>
+      <input name="cpf" class="form-control" value="{{ row.cpf if row and row.cpf else '' }}">
+    </div>
+    <div class="col mb-3">
+      <label class="form-label">CNH</label>
+      <input name="cnh" class="form-control" value="{{ row.cnh if row and row.cnh else '' }}">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col mb-3">
+      <label class="form-label">Telefone</label>
+      <input name="telefone" class="form-control" value="{{ row.telefone if row and row.telefone else '' }}">
+    </div>
+    <div class="col mb-3">
+      <label class="form-label">E-mail</label>
+      <input type="email" name="email" class="form-control" value="{{ row.email if row and row.email else '' }}">
+    </div>
+  </div>
+  {% if row %}
+  <div class="form-check mb-3">
+    <input type="checkbox" class="form-check-input" name="ativo" id="ativo" {% if row.ativo %}checked{% endif %}>
+    <label class="form-check-label" for="ativo">Ativo</label>
+  </div>
+  {% endif %}
+  <button class="btn btn-primary">Salvar</button>
+  <a href="{{ url_for('cadastros.motoristas') }}" class="btn btn-link">Cancelar</a>
+</form>
+{% endblock %}

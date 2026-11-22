@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Cadastros{% endblock %}
+{% block content %}
+<h1 class="h3 mb-4">Cadastros</h1>
+<div class="row g-3">
+  {% for nome, url, desc in [
+    ('Fornecedores', 'cadastros.fornecedores', 'Empresas que solicitam coletas'),
+    ('Pontos de coleta', 'cadastros.pontos', 'Endereços e responsáveis'),
+    ('Veículos', 'cadastros.veiculos', 'Frota roll-on, garra e carretas'),
+    ('Motoristas', 'cadastros.motoristas', 'Equipe interna e terceirizada'),
+    ('Disponibilidades', 'cadastros.disponibilidades', 'Folgas e janelas dos motoristas'),
+    ('Usuários', 'cadastros.usuarios', 'Contas e perfis de acesso'),
+  ] %}
+  <div class="col-md-4">
+    <a href="{{ url_for(url) }}" class="text-decoration-none">
+      <div class="card h-100"><div class="card-body">
+        <h2 class="h5 text-primary">{{ nome }}</h2>
+        <p class="text-muted small mb-0">{{ desc }}</p>
+      </div></div>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Disponibilidades{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Disponibilidades dos motoristas</h1>
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header fw-semibold">Registrar</div>
+      <div class="card-body">
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf }}">
+          <div class="mb-3">
+            <label class="form-label">Motorista *</label>
+            <select name="motorista_id" class="form-select" required>
+              {% for m in motoristas %}<option value="{{ m.id }}">{{ m.nome }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Início *</label>
+            <input type="datetime-local" name="inicio" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Fim *</label>
+            <input type="datetime-local" name="fim" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Situação</label>
+            <select name="disponivel" class="form-select">
+              <option value="1">Disponível</option>
+              <option value="0">Indisponível (folga/férias/manutenção)</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Motivo</label>
+            <input name="motivo" class="form-control" placeholder="Folga, férias…">
+          </div>
+          <button class="btn btn-primary">Salvar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header fw-semibold">Últimos registros</div>
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead class="table-light"><tr><th>Motorista</th><th>Início</th><th>Fim</th><th>Status</th><th>Motivo</th></tr></thead>
+          <tbody>
+            {% for r in rows %}
+            <tr>
+              <td>{{ r.motorista_nome }}</td>
+              <td>{{ r.inicio }}</td>
+              <td>{{ r.fim }}</td>
+              <td>{{ 'Livre' if r.disponivel else 'Bloqueado' }}</td>
+              <td>{{ r.motivo or '—' }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" class="text-center text-muted py-3">Nenhum registro.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<a href="{{ url_for('cadastros.index') }}" class="btn btn-link mt-3">← Voltar</a>
+{% endblock %}

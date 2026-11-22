@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if row else 'Novo' }} ponto{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">{{ 'Editar ponto de coleta' if row else 'Novo ponto de coleta' }}</h1>
+<form method="post" class="col-lg-8">
+  <input type="hidden" name="csrf_token" value="{{ csrf }}">
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Fornecedor *</label>
+      <select name="fornecedor_id" class="form-select" {% if not row %}required{% endif %} {% if row %}disabled{% endif %}>
+        {% if row %}<option value="{{ row.fornecedor_id }}">{{ row.fornecedor_id }}</option>{% endif %}
+        {% for f in fornecedores %}
+        <option value="{{ f.id }}" {% if row and row.fornecedor_id == f.id %}selected{% endif %}>{{ f.razao_social }}</option>
+        {% endfor %}
+      </select>
+      {% if row %}<input type="hidden" name="fornecedor_id" value="{{ row.fornecedor_id }}">{% endif %}
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Nome do ponto *</label>
+      <input name="nome" class="form-control" required value="{{ row.nome if row else '' }}">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8 mb-3">
+      <label class="form-label">Logradouro *</label>
+      <input name="logradouro" class="form-control" required value="{{ row.logradouro if row else '' }}">
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Número</label>
+      <input name="numero" class="form-control" value="{{ row.numero if row and row.numero else '' }}">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-5 mb-3">
+      <label class="form-label">Bairro *</label>
+      <input name="bairro" class="form-control" required value="{{ row.bairro if row else '' }}">
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Cidade *</label>
+      <input name="cidade" class="form-control" required value="{{ row.cidade if row else '' }}">
+    </div>
+    <div class="col-md-3 mb-3">
+      <label class="form-label">UF *</label>
+      <input name="uf" class="form-control" maxlength="2" required value="{{ row.uf if row else 'MG' }}">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <label class="form-label">CEP</label>
+      <input name="cep" class="form-control" value="{{ row.cep if row and row.cep else '' }}">
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Latitude</label>
+      <input name="latitude" class="form-control" value="{{ row.latitude if row and row.latitude else '' }}" placeholder="auto (mock)">
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Longitude</label>
+      <input name="longitude" class="form-control" value="{{ row.longitude if row and row.longitude else '' }}" placeholder="auto (mock)">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Responsável *</label>
+      <input name="nome_responsavel" class="form-control" required value="{{ row.nome_responsavel if row else '' }}">
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Contato do responsável</label>
+      <input name="contato_responsavel" class="form-control" value="{{ row.contato_responsavel if row and row.contato_responsavel else '' }}">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Veículo padrão</label>
+      <select name="tipo_veiculo_padrao" class="form-select">
+        {% for t in tipos %}
+        <option value="{{ t }}" {% if row and row.tipo_veiculo_padrao == t %}selected{% elif not row and t == 'garra' %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Peso gatilho (kg)</label>
+      <input type="number" step="0.001" name="peso_gatilho_kg" class="form-control" value="{{ row.peso_gatilho_kg if row and row.peso_gatilho_kg else '' }}">
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Tempo desloc. (min)</label>
+      <input type="number" name="tempo_deslocamento_minutos" class="form-control" value="{{ row.tempo_deslocamento_minutos if row and row.tempo_deslocamento_minutos else '' }}">
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Observações</label>
+    <textarea name="observacoes" class="form-control" rows="2">{{ row.observacoes if row and row.observacoes else '' }}</textarea>
+  </div>
+  {% if row %}
+  <div class="form-check mb-3">
+    <input type="checkbox" class="form-check-input" name="ativo" id="ativo" {% if row.ativo %}checked{% endif %}>
+    <label class="form-check-label" for="ativo">Ativo</label>
+  </div>
+  {% endif %}
+  <button class="btn btn-primary">Salvar</button>
+  <a href="{{ url_for('cadastros.pontos') }}" class="btn btn-link">Cancelar</a>
+</form>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if row else 'Novo' }} fornecedor{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">{{ 'Editar fornecedor' if row else 'Novo fornecedor' }}</h1>
+<form method="post" class="col-md-6">
+  <input type="hidden" name="csrf_token" value="{{ csrf }}">
+  <div class="mb-3">
+    <label class="form-label">Razão social *</label>
+    <input name="razao_social" class="form-control" required value="{{ row.razao_social if row else '' }}">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Nome fantasia</label>
+    <input name="nome_fantasia" class="form-control" value="{{ row.nome_fantasia if row and row.nome_fantasia else '' }}">
+  </div>
+  <div class="row">
+    <div class="col mb-3">
+      <label class="form-label">CNPJ/CPF</label>
+      <input name="cnpj_cpf" class="form-control" value="{{ row.cnpj_cpf if row and row.cnpj_cpf else '' }}">
+    </div>
+    <div class="col mb-3">
+      <label class="form-label">Telefone</label>
+      <input name="telefone" class="form-control" value="{{ row.telefone if row and row.telefone else '' }}">
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">E-mail</label>
+    <input type="email" name="email" class="form-control" value="{{ row.email if row and row.email else '' }}">
+  </div>
+  <div class="form-check mb-3">
+    <input type="checkbox" class="form-check-input" name="frequente" id="freq" {% if row and row.frequente %}checked{% endif %}>
+    <label class="form-check-label" for="freq">Fornecedor frequente</label>
+  </div>
+  {% if row %}
+  <div class="form-check mb-3">
+    <input type="checkbox" class="form-check-input" name="ativo" id="ativo" {% if row.ativo %}checked{% endif %}>
+    <label class="form-check-label" for="ativo">Ativo</label>
+  </div>
+  {% endif %}
+  <button class="btn btn-primary">Salvar</button>
+  <a href="{{ url_for('cadastros.fornecedores') }}" class="btn btn-link">Cancelar</a>
+</form>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Pontos de coleta{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Pontos de coleta</h1>
+  <a href="{{ url_for('cadastros.ponto_novo') }}" class="btn btn-primary">Novo</a>
+</div>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-sm mb-0 align-middle">
+      <thead class="table-light">
+        <tr><th>Nome</th><th>Fornecedor</th><th>Bairro</th><th>Cidade</th><th>Veículo</th><th>Responsável</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+        <tr>
+          <td>{{ r.nome }}</td>
+          <td>{{ r.razao_social }}</td>
+          <td>{{ r.bairro }}</td>
+          <td>{{ r.cidade }}/{{ r.uf }}</td>
+          <td><span class="badge text-bg-light">{{ r.tipo_veiculo_padrao }}</span></td>
+          <td>{{ r.nome_responsavel }}</td>
+          <td class="text-end">
+            <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('cadastros.ponto_editar', pid=r.id) }}">Editar</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-3">Nenhum ponto.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<a href="{{ url_for('cadastros.index') }}" class="btn btn-link mt-3">← Voltar</a>
+{% endblock %}

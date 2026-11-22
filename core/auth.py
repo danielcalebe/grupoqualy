@@ -104,9 +104,6 @@ def requer_perfis(*perfis: str) -> Callable:
 
 @bp_auth.route("/login", methods=["GET", "POST"])
 def login():
-    if g.get("usuario"):
-        return redirect(url_for("painel.home"))
-
     erro = None
     if request.method == "POST":
         email = (request.form.get("email") or "").strip().lower()
@@ -116,6 +113,7 @@ def login():
             "SELECT * FROM usuarios WHERE email = ? AND ativo = 1", (email,)
         )
         if row is None or not conferir_senha(row["senha_hash"], senha):
+            logout_usuario()
             erro = "E-mail ou senha inválidos."
         else:
             usuario = Usuario.from_row(row)
@@ -124,6 +122,8 @@ def login():
             if not destino.startswith("/"):
                 destino = url_for("painel.home")
             return redirect(destino)
+    elif g.get("usuario"):
+        return redirect(url_for("painel.home"))
 
     return render_template("auth/login.html", erro=erro)
 
