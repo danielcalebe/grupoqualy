@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Buscar tíquete{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Consulta de tíquete</h1>
+
+<form method="get" class="mb-4">
+  <div class="input-group" style="max-width: 420px;">
+    <input type="text" name="numero" class="form-control" placeholder="TQ-2026-0001"
+           value="{{ numero }}">
+    <button class="btn btn-primary">Buscar</button>
+  </div>
+</form>
+
+{% if numero and not resultado %}
+<div class="alert alert-warning">Nenhum tíquete encontrado para <strong>{{ numero }}</strong>.</div>
+{% endif %}
+
+{% if resultado %}
+<div class="card" style="max-width: 720px;">
+  <div class="card-header d-flex justify-content-between">
+    <strong>Tíquete {{ resultado.numero }}</strong>
+    <span class="badge text-bg-success">OK</span>
+  </div>
+  <div class="card-body">
+    <div class="row mb-2">
+      <div class="col-6"><strong>Coleta:</strong> <code>{{ resultado.codigo }}</code></div>
+      <div class="col-6"><strong>Status:</strong> {{ resultado.status }}</div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-6"><strong>Peso líquido:</strong>
+        {{ '%.0f'|format(resultado.peso_liquido_kg) if resultado.peso_liquido_kg else '—' }} kg</div>
+      <div class="col-6"><strong>Descarregado em:</strong> {{ resultado.data_hora_descarregamento }}</div>
+    </div>
+    <hr>
+    <div class="row mb-2">
+      <div class="col-6"><strong>Fornecedor:</strong> {{ resultado.fornecedor_nome }}</div>
+      <div class="col-6"><strong>Ponto:</strong> {{ resultado.ponto_nome }}</div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-6"><strong>Endereço:</strong>
+        {{ resultado.logradouro }}{% if resultado.ponto_numero %}, {{ resultado.ponto_numero }}{% endif %}</div>
+      <div class="col-6"><strong>Cidade/UF:</strong> {{ resultado.cidade }}/{{ resultado.uf }}</div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-6"><strong>Responsável:</strong> {{ resultado.nome_responsavel }}</div>
+      <div class="col-6"><strong>Contato:</strong> {{ resultado.contato_responsavel or '—' }}</div>
+    </div>
+    <div class="row">
+      <div class="col-6"><strong>Veículo:</strong> {{ resultado.placa or '—' }}</div>
+      <div class="col-6"><strong>Motorista:</strong> {{ resultado.motorista_nome or '—' }}</div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

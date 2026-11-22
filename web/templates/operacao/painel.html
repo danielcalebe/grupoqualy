@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Operação{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+  <h1 class="h3 mb-0">Painel de operação</h1>
+  <form method="get" class="d-flex gap-2">
+    <input type="date" name="data" class="form-control" value="{{ data }}">
+    <button class="btn btn-outline-secondary">Buscar</button>
+  </form>
+</div>
+
+<!-- Mapa -->
+<div class="card mb-4">
+  <div class="card-header fw-semibold">Mapa do dia (Google Maps mock)</div>
+  <div class="card-body p-0" style="height: 320px;">
+    {% include "operacao/mapa_partial.html" %}
+  </div>
+</div>
+
+<!-- Kanban -->
+<div class="row g-3 mb-4">
+  {% for status, titulo, cor in [
+    ('agendada', 'Agendadas', 'secondary'),
+    ('em_andamento', 'Em andamento', 'primary'),
+    ('concluida', 'Concluídas', 'success'),
+    ('cancelada', 'Canceladas', 'danger')] %}
+  <div class="col-lg-3 col-md-6">
+    <div class="card h-100 border-{{ cor }}">
+      <div class="card-header bg-{{ cor }} text-white fw-semibold d-flex justify-content-between">
+        <span>{{ titulo }}</span><span class="badge bg-light text-dark">{{ kanban[status]|length }}</span>
+      </div>
+      <div class="card-body p-2" style="max-height: 340px; overflow-y: auto;">
+        {% for c in kanban[status] %}
+        <div class="border rounded p-2 mb-2 small">
+          <div class="d-flex justify-content-between">
+            <a href="{{ url_for('coletas.detalhe', cid=c.id) }}"><strong>{{ c.codigo }}</strong></a>
+            <span class="text-muted">{{ c.data_hora_prevista_inicio[11:16] }}</span>
+          </div>
+          <div>{{ c.ponto_nome }}</div>
+          <div class="text-muted">{{ c.bairro }}{% if c.placa %} · {{ c.placa }}{% endif %}</div>
+          {% if c.latitude is not none %}
+          <div class="text-muted">Coord: {{ '%.4f'|format(c.latitude) }}, {{ '%.4f'|format(c.longitude) }}</div>
+          {% endif %}
+          {% if usuario.pode('alterar_status') %}
+          <form method="post" action="{{ url_for('operacao.alterar_status', cid=c.id) }}" class="mt-1 d-flex gap-1">
+            <input type="hidden" name="csrf_token" value="{{ csrf }}">
+            {% if status == 'agendada' %}
+            <button name="status" value="em_andamento" class="btn btn-sm btn-primary">Iniciar</button>
+            <button name="status" value="cancelada" class="btn btn-sm btn-outline-danger">Cancelar</button>
+            {% elif status == 'em_andamento' %}
+            <button name="status" value="concluida" class="btn btn-sm btn-success">Concluir</button>
+            {% elif status == 'cancelada' %}
+            <button name="status" value="agendada" class="btn btn-sm btn-outline-secondary">Reagendar</button>
+            {% else %}
+            <span class="text-muted">Finalizada</span>
+            {% endif %}
+          </form>
+          {% endif %}
+        </div>
+        {% else %}
+        <div class="text-muted text-center py-3">—</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Notificações -->
+{% if nao_notificadas %}
+<div class="card">
+  <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
+    <span>Notificações de motoristas</span>
+    <form method="post" action="{{ url_for('operacao.marcar_notificacoes') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf }}">
+      <button class="btn btn-sm btn-outline-secondary">Marcar todas como lidas</button>
+    </form>
+  </div>
+  <ul class="list-group list-group-flush small">
+    {% for n in nao_notificadas %}
+    <li class="list-group-item">
+      {{ n.data_hora_envio }} — {{ n.mensagem }}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% endblock %}

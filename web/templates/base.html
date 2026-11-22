@@ -20,6 +20,8 @@
         <li class="nav-item"><a class="nav-link" href="{{ url_for('painel.home') }}">Painel</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('coletas.index') }}">Coletas</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('rotas.index') }}">Rotas</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('operacao.painel') }}">Operação</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('tickets.busca') }}">Tíquetes</a></li>
         {% if usuario and usuario.pode('cadastros') %}
         <li class="nav-item"><a class="nav-link" href="{{ url_for('cadastros.index') }}">Cadastros</a></li>
         {% endif %}

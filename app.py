@@ -45,12 +45,16 @@ def create_app(db_path=None) -> Flask:
     from web.routes.cadastros import bp_cadastros
     from web.routes.coletas import bp_coletas
     from web.routes.rotas import bp_rotas
+    from web.routes.operacao import bp_operacao
+    from web.routes.tickets import bp_tickets
 
     app.register_blueprint(bp_auth)
     app.register_blueprint(bp_painel)
     app.register_blueprint(bp_cadastros)
     app.register_blueprint(bp_coletas)
     app.register_blueprint(bp_rotas)
+    app.register_blueprint(bp_operacao)
+    app.register_blueprint(bp_tickets)
 
     @app.route("/api/health")
     def health():
