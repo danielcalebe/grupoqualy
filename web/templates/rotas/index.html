@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Rotas{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+  <h1 class="h3 mb-0">Rotas diárias</h1>
+  {% if usuario.pode('gerar_rota') %}
+  <a href="{{ url_for('rotas.gerar') }}" class="btn btn-primary">Gerar rota</a>
+  {% endif %}
+</div>
+
+<form class="row g-2 mb-3" method="get">
+  <div class="col-auto">
+    <input type="date" name="data" class="form-control" value="{{ filtros.data }}">
+  </div>
+  <div class="col-auto"><button class="btn btn-outline-secondary">Filtrar</button></div>
+</form>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-sm mb-0 align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Data</th><th>Veículo</th><th>Motorista</th><th>Coletas</th>
+          <th>Km</th><th>Tempo</th><th>Enviada</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+        <tr>
+          <td>{{ r.data }}</td>
+          <td><code>{{ r.placa }}</code> <small class="text-muted">{{ r.veiculo_tipo }}</small></td>
+          <td>{{ r.motorista_nome }}</td>
+          <td>{{ r.n_coletas }}</td>
+          <td>{{ r.distancia_total_prevista_km }} km</td>
+          <td>{{ r.tempo_total_previsto_minutos }} min</td>
+          <td>{{ 'Sim' if r.data_hora_envio_programacao else 'Não' }}</td>
+          <td class="text-end">
+            <a class="btn btn-sm btn-outline-primary" href="{{ url_for('rotas.detalhe', rid=r.id) }}">Abrir</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="text-center text-muted py-4">Nenhuma rota gerada.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

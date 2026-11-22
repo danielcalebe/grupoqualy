@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Rota {{ r.id }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+  <div>
+    <h1 class="h3 mb-1">Rota de {{ r.data }}</h1>
+    <p class="text-muted mb-0">
+      <code>{{ r.placa }}</code> ({{ r.veiculo_tipo }}) · {{ r.motorista_nome }} ·
+      {{ r.distancia_total_prevista_km }} km · {{ r.tempo_total_previsto_minutos }} min ·
+      por {{ r.elaborada_por_nome }}
+      {% if r.data_hora_envio_programacao %} · <span class="badge text-bg-success">enviada</span>{% endif %}
+    </p>
+  </div>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-secondary" href="{{ url_for('rotas.imprimir', rid=r.id) }}" target="_blank">Imprimir</a>
+    {% if usuario.pode('gerar_rota') and not r.data_hora_envio_programacao %}
+    <form method="post" action="{{ url_for('rotas.enviar', rid=r.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf }}">
+      <button class="btn btn-success">Enviar programação</button>
+    </form>
+    {% endif %}
+    <a class="btn btn-outline-primary" href="{{ url_for('rotas.index') }}">← Voltar</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header fw-semibold">Ordem de visita</div>
+  <div class="table-responsive">
+    <table class="table table-sm mb-0 align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>#</th><th>Código</th><th>Ponto</th><th>Bairro</th>
+          <th>Chegada</th><th>Saída</th><th>Km</th><th>Peso est.</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in r.coletas %}
+        <tr>
+          <td>{{ c.ordem_na_rota }}</td>
+          <td><a href="{{ url_for('coletas.detalhe', cid=c.id) }}"><code>{{ c.codigo }}</code></a></td>
+          <td>{{ c.ponto_nome }}</td>
+          <td>{{ c.bairro }}</td>
+          <td>{{ c.data_hora_prevista_inicio[11:16] }}</td>
+          <td>{{ c.data_hora_prevista_fim[11:16] }}</td>
+          <td>—</td>
+          <td>{{ '%.0f'|format(c.peso_estimado_kg) if c.peso_estimado_kg else '—' }} kg</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

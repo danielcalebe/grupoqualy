@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Gerar rota{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Gerar rota do dia</h1>
+<p class="text-muted">Agrupa as coletas agendadas por bairro, ordena por proximidade (vizinho mais próximo + 2-opt) e encadeia horários a partir do pátio (07:00).</p>
+
+<form method="post" class="col-md-6">
+  <input type="hidden" name="csrf_token" value="{{ csrf }}">
+  <div class="mb-3">
+    <label class="form-label">Data *</label>
+    <input type="date" name="data" class="form-control" required
+           value="{{ hoje or '' }}">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Veículo *</label>
+    <select name="veiculo_id" class="form-select" required>
+      {% for v in veiculos %}
+      <option value="{{ v.id }}">{{ v.placa }} ({{ v.tipo }})</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Motorista *</label>
+    <select name="motorista_id" class="form-select" required>
+      {% for m in motoristas %}
+      <option value="{{ m.id }}">{{ m.nome }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <button class="btn btn-primary">Gerar rota</button>
+  <a href="{{ url_for('rotas.index') }}" class="btn btn-link">Cancelar</a>
+</form>
+{% endblock %}
