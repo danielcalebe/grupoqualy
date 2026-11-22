@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Painel · Logística Qualy{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="h3 mb-1">Painel operacional</h1>
+    <p class="text-muted mb-0">Coletas de hoje · <small id="data-hoje"></small></p>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-2">
+    <div class="card text-center"><div class="card-body">
+      <div class="fs-3 fw-bold">{{ kpis.total or 0 }}</div>
+      <div class="text-muted small">Total do dia</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-md-2">
+    <div class="card text-center border-primary"><div class="card-body">
+      <div class="fs-3 fw-bold text-primary">{{ kpis.agendadas or 0 }}</div>
+      <div class="text-muted small">Agendadas</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-md-2">
+    <div class="card text-center border-warning"><div class="card-body">
+      <div class="fs-3 fw-bold text-warning">{{ kpis.em_andamento or 0 }}</div>
+      <div class="text-muted small">Em andamento</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-md-2">
+    <div class="card text-center border-success"><div class="card-body">
+      <div class="fs-3 fw-bold text-success">{{ kpis.concluidas or 0 }}</div>
+      <div class="text-muted small">Concluídas</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-md-2">
+    <div class="card text-center border-secondary"><div class="card-body">
+      <div class="fs-3 fw-bold text-secondary">{{ kpis.canceladas or 0 }}</div>
+      <div class="text-muted small">Canceladas</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-md-2">
+    <div class="card text-center border-danger"><div class="card-body">
+      <div class="fs-3 fw-bold text-danger">{{ kpis.urgentes or 0 }}</div>
+      <div class="text-muted small">Urgentes</div>
+    </div></div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-header fw-semibold">Últimas coletas</div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-sm mb-0 align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Código</th><th>Ponto</th><th>Bairro</th>
+                <th>Início</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in ultimas %}
+              <tr>
+                <td><code>{{ c.codigo }}</code></td>
+                <td>{{ c.ponto_nome }}</td>
+                <td>{{ c.bairro }}</td>
+                <td>{{ c.data_hora_prevista_inicio }}</td>
+                <td><span class="badge {{ 'text-bg-primary' if c.status == 'agendada' else 'text-bg-warning' if c.status == 'em_andamento' else 'text-bg-success' if c.status == 'concluida' else 'text-bg-secondary' }}">{{ c.status }}</span></td>
+              </tr>
+              {% else %}
+              <tr><td colspan="5" class="text-muted text-center py-3">Nenhuma coleta registrada ainda.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header fw-semibold">Alertas</div>
+      <ul class="list-group list-group-flush">
+        {% for a in alertas %}
+        <li class="list-group-item d-flex justify-content-between">
+          <span>{{ a.mensagem }}</span>
+          <span class="badge text-bg-{{ 'danger' if a.severidade == 'critico' else 'warning' if a.severidade == 'aviso' else 'info' }}">{{ a.severidade }}</span>
+        </li>
+        {% else %}
+        <li class="list-group-item text-muted">Sem alertas abertos.</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="card mt-3">
+      <div class="card-header fw-semibold">Ambiente</div>
+      <div class="card-body small text-muted">
+        Fase 1 — fundação (auth + painel). Módulos de agendamento, rotas, mapa e tíquetes entram nas fases F2–F5.
+        Detalhes em <code>docs/PLANEJAMENTO_SISTEMA_LOGISTICA.md</code>.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.getElementById('data-hoje').textContent =
+    new Date().toLocaleDateString('pt-BR', {weekday:'long', day:'2-digit', month:'long', year:'numeric'});
+</script>
+{% endblock %}

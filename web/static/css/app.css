@@ -1,0 +1,22 @@
+/* Estilos base — Sistema de Logística Grupo Qualy */
+body {
+  background: #f5f6f8;
+  min-height: 100vh;
+}
+
+.login-page {
+  max-width: 100%;
+}
+
+.card {
+  border: 1px solid rgba(0, 0, 0, .08);
+}
+
+.navbar-brand {
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+code {
+  font-size: .9em;
+}

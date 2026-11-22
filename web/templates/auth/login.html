@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Login · Logística Qualy{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5 col-lg-4">
+    <div class="card shadow-sm mt-5">
+      <div class="card-body p-4">
+        <h1 class="h4 mb-1 text-center">Grupo Qualy</h1>
+        <p class="text-muted text-center mb-4">Sistema de Logística — Coletas e Rotas</p>
+
+        {% if erro %}
+          <div class="alert alert-danger py-2">{{ erro }}</div>
+        {% endif %}
+
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label" for="email">E-mail</label>
+            <input class="form-control" type="email" id="email" name="email"
+                   required autofocus autocomplete="username">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="senha">Senha</label>
+            <input class="form-control" type="password" id="senha" name="senha"
+                   required autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        </form>
+
+        <hr>
+        <p class="small text-muted mb-0">
+          Dev seed: <code>admin@grupoqualy.com.br</code> / <code>Qualy@123</code>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
