@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Coletas{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+  <h1 class="h3 mb-0">Coletas</h1>
+  {% if usuario.pode('agendar') %}
+  <a href="{{ url_for('coletas.nova') }}" class="btn btn-primary">Nova coleta</a>
+  {% endif %}
+</div>
+
+<form class="row g-2 mb-3" method="get">
+  <div class="col-auto">
+    <input type="date" name="data" class="form-control" value="{{ filtros.data }}">
+  </div>
+  <div class="col-auto">
+    <select name="status" class="form-select">
+      <option value="">Todos status</option>
+      {% for s in ['agendada','em_andamento','concluida','cancelada'] %}
+      <option value="{{ s }}" {% if filtros.status == s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-auto">
+    <input name="q" class="form-control" placeholder="Código, ponto, bairro…" value="{{ filtros.q }}">
+  </div>
+  <div class="col-auto">
+    <button class="btn btn-outline-secondary">Filtrar</button>
+  </div>
+</form>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-sm mb-0 align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Código</th><th>Ponto</th><th>Bairro</th><th>Início</th>
+          <th>Veículo</th><th>Motorista</th><th>Peso est.</th><th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+        <tr class="{% if r.urgente and r.status not in ('concluida','cancelada') %}table-danger{% endif %}">
+          <td><a href="{{ url_for('coletas.detalhe', cid=r.id) }}"><code>{{ r.codigo }}</code></a></td>
+          <td>{{ r.ponto_nome }}</td>
+          <td>{{ r.bairro }}</td>
+          <td>{{ r.data_hora_prevista_inicio[:16].replace('T',' ') }}</td>
+          <td>{{ r.placa or '—' }}</td>
+          <td>{{ r.motorista_nome or '—' }}</td>
+          <td>{{ '%.0f'|format(r.peso_estimado_kg) if r.peso_estimado_kg else '—' }} kg</td>
+          <td>
+            <span class="badge
+              {{ 'text-bg-primary' if r.status=='agendada' else 'text-bg-warning' if r.status=='em_andamento' else 'text-bg-success' if r.status=='concluida' else 'text-bg-secondary' }}">
+              {{ 'URGENTE · ' if r.urgente and r.status not in ('concluida','cancelada') }}{{ r.status }}
+            </span>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="text-center text-muted py-4">Nenhuma coleta encontrada.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

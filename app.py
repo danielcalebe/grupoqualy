@@ -43,10 +43,12 @@ def create_app(db_path=None) -> Flask:
     from core.auth import bp_auth
     from web.routes.painel import bp_painel
     from web.routes.cadastros import bp_cadastros
+    from web.routes.coletas import bp_coletas
 
     app.register_blueprint(bp_auth)
     app.register_blueprint(bp_painel)
     app.register_blueprint(bp_cadastros)
+    app.register_blueprint(bp_coletas)
 
     @app.route("/api/health")
     def health():

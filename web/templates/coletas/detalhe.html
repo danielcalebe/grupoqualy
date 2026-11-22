@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}{{ c.codigo }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+  <div>
+    <h1 class="h3 mb-1">
+      <code>{{ c.codigo }}</code>
+      <span class="badge
+        {{ 'text-bg-primary' if c.status=='agendada' else 'text-bg-warning' if c.status=='em_andamento' else 'text-bg-success' if c.status=='concluida' else 'text-bg-secondary' }}">
+        {{ c.status }}
+      </span>
+      {% if c.urgente and c.status not in ('concluida','cancelada') %}
+      <span class="badge text-bg-danger">URGENTE</span>
+      {% endif %}
+    </h1>
+    <p class="text-muted mb-0">{{ c.ponto_nome }} · {{ c.bairro }} · {{ c.cidade }}/{{ c.uf }}</p>
+  </div>
+  <a href="{{ url_for('coletas.index') }}" class="btn btn-outline-secondary">← Voltar</a>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="card mb-3">
+      <div class="card-header fw-semibold">Dados da coleta</div>
+      <div class="card-body">
+        <div class="row mb-2">
+          <div class="col-5 text-muted">Fornecedor</div>
+          <div class="col-7">{{ c.fornecedor_nome }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-5 text-muted">Endereço</div>
+          <div class="col-7">{{ c.logradouro }}{% if c.numero %}, {{ c.numero }}{% endif %}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-5 text-muted">Responsável</div>
+          <div class="col-7">{{ c.nome_responsavel }} {% if c.contato_responsavel %}· {{ c.contato_responsavel }}{% endif %}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-5 text-muted">Veículo necessário</div>
+          <div class="col-7">{{ c.tipo_veiculo_necessario }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-5 text-muted">Veículo / Motorista</div>
+          <div class="col-7">{{ c.placa or 'A definir' }} · {{ c.motorista_nome or 'A definir' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-5 text-muted">Início previsto</div>
+          <div class="col-7">{{ c.data_hora_prevista_inicio[:16].replace('T',' ') }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-5 text-muted">Fim previsto</div>
+          <div class="col-7">{{ c.data_hora_prevista_fim[:16].replace('T',' ') }}
+            <small class="text-muted">({{ c.tempo_total_minutos }} min: ida {{ c.tempo_deslocamento_ida_minutos }} + exec {{ c.tempo_execucao_minutos }} + volta {{ c.tempo_deslocamento_volta_minutos }})</small>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-5 text-muted">Peso estimado / real</div>
+          <div class="col-7">
+            {{ '%.1f'|format(c.peso_estimado_kg) if c.peso_estimado_kg else '—' }} kg
+            / {{ '%.1f'|format(c.peso_real_kg) if c.peso_real_kg else '—' }} kg
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-5 text-muted">Origem</div>
+          <div class="col-7">{{ c.origem }}</div>
+        </div>
+        {% if c.observacoes %}
+        <div class="row mb-2">
+          <div class="col-5 text-muted">Observações</div>
+          <div class="col-7">{{ c.observacoes }}</div>
+        </div>
+        {% endif %}
+        {% if c.ticket_numero %}
+        <div class="alert alert-success py-2 mb-0 mt-2">
+          Tíquete <strong>{{ c.ticket_numero }}</strong>
+          {% if c.peso_liquido_kg %} · {{ c.peso_liquido_kg }} kg{% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if c.status == 'cancelada' and c.motivo_cancelamento %}
+    <div class="alert alert-secondary">Motivo do cancelamento: {{ c.motivo_cancelamento }}</div>
+    {% endif %}
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card mb-3">
+      <div class="card-header fw-semibold">Histórico de status</div>
+      <ul class="list-group list-group-flush">
+        {% for h in historico %}
+        <li class="list-group-item d-flex justify-content-between">
+          <span>
+            <strong>{{ h.status_novo }}</strong>
+            {% if h.observacao %}<br><small class="text-muted">{{ h.observacao }}</small>{% endif %}
+          </span>
+          <span class="text-end text-muted small">
+            {{ h.data_hora }}<br>{{ h.usuario_nome }}
+          </span>
+        </li>
+        {% else %}
+        <li class="list-group-item text-muted">Sem histórico.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    {% if c.status in ('agendada','em_andamento','concluida') %}
+    <div class="card">
+      <div class="card-header fw-semibold">Próximas ações</div>
+      <div class="card-body small text-muted">
+        Transições de status, mapa e tíquete disponíveis na Fase 5 (painel de operação).
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
