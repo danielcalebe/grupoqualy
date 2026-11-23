@@ -163,6 +163,29 @@ def criar_coleta(db, form: dict[str, str], usuario_id: int) -> dict[str, Any]:
            VALUES (?, NULL, 'agendada', ?, 'Coleta criada')""",
         (coleta_id, usuario_id),
     )
+
+    # agenda externa (Google Calendar mock/real)
+    try:
+        from services.integrations.google_calendar import criar_evento
+
+        evento = criar_evento(
+            {
+                "id": coleta_id,
+                "codigo": codigo,
+                "data_hora_prevista_inicio": inicio.strftime("%Y-%m-%d %H:%M:%S"),
+                "data_hora_prevista_fim": fim.strftime("%Y-%m-%d %H:%M:%S"),
+                "ponto_nome": ponto.get("nome"),
+                "observacoes": observacoes,
+            }
+        )
+        if evento.get("id"):
+            db.execute(
+                "UPDATE coletas SET id_evento_agenda_externa = ? WHERE id = ?",
+                (evento["id"], coleta_id),
+            )
+    except Exception:
+        pass
+
     return {"ok": True, "coleta_id": coleta_id, "codigo": codigo, "avisos": avisos}
 
 

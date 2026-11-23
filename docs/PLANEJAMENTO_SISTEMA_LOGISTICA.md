@@ -495,24 +495,24 @@ function ordenar(pontos_do_dia, patio):
 - [x] Testes: `test_auth.py` — **9 passed**
 - [x] README mínimo (como rodar)
 
-### F2 — Cadastros
+### F2 — Cadastros (EXECUTADA — 2026-11-22)
 - CRUD fornecedores, pontos de coleta (com lat/lng mock), veículos, motoristas, disponibilidades, usuários (admin).
 - CSRF; paginação simples; busca por nome/bairro.
 
-### F3 — Agendamento
+### F3 — Agendamento (EXECUTADA — 2026-11-22)
 - Formulário + services + `algorithms/conflitos.py` + sugestões de slot + API dry-run.
 - Detalhe da coleta com histórico.
 
-### F4 — Rotas diárias
+### F4 — Rotas diárias (EXECUTADA — 2026-11-22)
 - `agrupamento.py`, `ordenacao_rota.py`, `services/rotas.py`, impressão da programação, envio mock.
 
-### F5 — Painel e execução
+### F5 — Painel e execução (EXECUTADA — 2026-11-22)
 - Kanban, mapa Leaflet, calendário do dia, transições de status, tíquete + consulta.
 
-### F6 — Indicadores e alertas
+### F6 — Indicadores e alertas (EXECUTADA — 2026-11-22)
 - `services/indicadores.py`, `services/notificacoes.py`, motor de alertas, página de alertas.
 
-### F7 — Integrações, testes e acabamento
+### F7 — Integrações, testes e acabamento (EXECUTADA — 2026-11-22)
 - Google mock/real documentado, testes de fluxo, CSV de relatórios, polimento, README final.
 
 ---

@@ -60,10 +60,6 @@ def create_app(db_path=None) -> Flask:
     app.register_blueprint(bp_alertas)
     app.register_blueprint(bp_api)
 
-    @app.route("/api/health")
-    def health():
-        return {"status": "ok"}
-
     @app.errorhandler(404)
     def not_found(e):
         from flask import render_template
