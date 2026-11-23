@@ -1,33 +1,40 @@
 {% extends "base.html" %}
 {% block title %}Login · Logística Qualy{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
+<div class="row justify-content-center align-items-center" style="min-height: 82vh;">
   <div class="col-md-5 col-lg-4">
-    <div class="card shadow-sm mt-5">
-      <div class="card-body p-4">
-        <h1 class="h4 mb-1 text-center">Grupo Qualy</h1>
-        <p class="text-muted text-center mb-4">Sistema de Logística — Coletas e Rotas</p>
+    <div class="card qualy-login-card">
+      <div class="card-body p-4 p-sm-5">
+        <div class="text-center mb-4">
+          <div class="mb-2">
+            <span class="qualy-brand-pill fs-4 px-3 py-1">Qualy</span>
+          </div>
+          <h1 class="h4 mb-1 fw-bold">Grupo Qualy</h1>
+          <p class="text-muted small mb-0">Sistema de Logística — Coletas, Rotas &amp; Reciclagem</p>
+        </div>
 
         {% if erro %}
-          <div class="alert alert-danger py-2">{{ erro }}</div>
+          <div class="alert alert-danger py-2 small">{{ erro }}</div>
         {% endif %}
 
         <form method="post">
           <div class="mb-3">
-            <label class="form-label" for="email">E-mail</label>
+            <label class="form-label small fw-semibold" for="email">E-mail</label>
             <input class="form-control" type="email" id="email" name="email"
+                   placeholder="usuario@grupoqualy.com.br"
                    required autofocus autocomplete="username">
           </div>
-          <div class="mb-3">
-            <label class="form-label" for="senha">Senha</label>
+          <div class="mb-4">
+            <label class="form-label small fw-semibold" for="senha">Senha</label>
             <input class="form-control" type="password" id="senha" name="senha"
+                   placeholder="••••••••"
                    required autocomplete="current-password">
           </div>
-          <button type="submit" class="btn btn-primary w-100">Entrar</button>
+          <button type="submit" class="btn btn-qualy-glow w-100 py-2">Entrar no sistema</button>
         </form>
 
-        <hr>
-        <p class="small text-muted mb-0">
+        <hr class="my-4">
+        <p class="small text-muted mb-0 text-center">
           Dev seed: <code>admin@grupoqualy.com.br</code> / <code>Qualy@123</code>
         </p>
       </div>

@@ -1,22 +1,767 @@
-/* Estilos base — Sistema de Logística Grupo Qualy */
+/* ==========================================================================
+   Grupo Qualy — Sistema Web de Logística
+   Visual Corporativo Profissional & Amigável (Paleta Oficial Grupo Qualy)
+   + Gráficos Futuristas Translúcidos em Vidro Verde (.qualy-chart-card)
+   + Modo Claro e Modo Escuro de Alta Legibilidade
+   ========================================================================== */
+
+:root,
+[data-theme="light"] {
+  /* Paleta oficial Grupo Qualy (Eco-Verde + Aço Industrial + Neutros limpos) */
+  --qualy-green: #2fa836;
+  --qualy-green-hover: #248a2a;
+  --qualy-green-neon: #22c55e;
+  --qualy-green-mint: #10b981;
+  --qualy-forest: #143d25;
+  --qualy-steel: #1f5e8c;
+  --qualy-cyan: #0891b2;
+
+  /* Superfícies sólidas, limpas e profissionais (Modo Claro) */
+  --qualy-bg: #f3f6f8;
+  --qualy-surface: #ffffff;
+  --qualy-surface-alt: #f8fafc;
+  --qualy-border: #dce4ec;
+  --qualy-border-strong: #c6d3df;
+  --qualy-shadow: 0 2px 10px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --qualy-shadow-hover: 0 10px 24px -6px rgba(15, 23, 42, 0.10);
+
+  /* Efeito Vidro Translúcido Futurista — EXCLUSIVO para os cards de gráficos */
+  --qualy-chart-glass-bg: linear-gradient(
+    145deg,
+    rgba(232, 250, 238, 0.68) 0%,
+    rgba(255, 255, 255, 0.56) 55%,
+    rgba(220, 248, 233, 0.64) 100%
+  );
+  --qualy-chart-glass-border: rgba(47, 168, 54, 0.30);
+  --qualy-chart-glass-border-hover: rgba(47, 168, 54, 0.56);
+  --qualy-chart-glass-shadow:
+    0 12px 32px -10px rgba(34, 150, 62, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  --qualy-chart-glass-glow:
+    0 16px 38px -8px rgba(47, 168, 54, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  --qualy-grid-line: rgba(47, 168, 54, 0.08);
+
+  /* Tipografia & Tabelas */
+  --qualy-text: #0f172a;
+  --qualy-text-muted: #526275;
+  --qualy-table-head: #f1f5f9;
+  --qualy-table-hover: #f4faf6;
+  --qualy-code-bg: #ebf7ee;
+  --qualy-code-color: #166534;
+
+  /* Navbar profissional Grupo Qualy */
+  --qualy-nav-bg: linear-gradient(135deg, #0f291c 0%, #153c28 60%, #184a31 100%);
+  --qualy-nav-border: rgba(47, 168, 54, 0.35);
+
+  /* Overrides Bootstrap 5.3 */
+  --bs-primary: #2fa836;
+  --bs-primary-rgb: 47, 168, 54;
+  --bs-success: #16a34a;
+  --bs-success-rgb: 22, 163, 74;
+  --bs-info: #1f5e8c;
+  --bs-info-rgb: 31, 94, 140;
+  --bs-link-color: #1f8a2a;
+  --bs-link-hover-color: #14631c;
+  --bs-body-bg: #f3f6f8;
+  --bs-body-color: #0f172a;
+  --bs-secondary-color: #526275;
+  --bs-border-color: #dce4ec;
+  --bs-card-bg: #ffffff;
+  --bs-card-cap-bg: #f8fafc;
+}
+
+[data-theme="dark"] {
+  /* Paleta Profissional & Amigável Dark (Ardósia limpa + Verde Qualy) */
+  --qualy-green: #34d35c;
+  --qualy-green-hover: #28be4f;
+  --qualy-green-neon: #4ade80;
+  --qualy-green-mint: #10b981;
+  --qualy-forest: #12241b;
+  --qualy-steel: #38bdf8;
+  --qualy-cyan: #2dd4bf;
+
+  /* Superfícies sólidas, confortáveis e profissionais (Modo Escuro amigável) */
+  --qualy-bg: #0f1722;
+  --qualy-surface: #16202e;
+  --qualy-surface-alt: #1c2838;
+  --qualy-border: rgba(148, 163, 184, 0.16);
+  --qualy-border-strong: rgba(148, 163, 184, 0.28);
+  --qualy-shadow: 0 4px 16px rgba(2, 6, 23, 0.35), 0 1px 2px rgba(2, 6, 23, 0.25);
+  --qualy-shadow-hover: 0 12px 28px -6px rgba(2, 6, 23, 0.55);
+
+  /* Efeito Vidro Translúcido Futurista — EXCLUSIVO para os cards de gráficos */
+  --qualy-chart-glass-bg: linear-gradient(
+    145deg,
+    rgba(20, 62, 42, 0.48) 0%,
+    rgba(16, 36, 32, 0.58) 55%,
+    rgba(15, 52, 38, 0.44) 100%
+  );
+  --qualy-chart-glass-border: rgba(74, 222, 128, 0.30);
+  --qualy-chart-glass-border-hover: rgba(74, 222, 128, 0.60);
+  --qualy-chart-glass-shadow:
+    0 16px 40px -12px rgba(2, 6, 23, 0.65),
+    0 0 24px -8px rgba(52, 211, 92, 0.18),
+    inset 0 1px 0 rgba(134, 239, 172, 0.18);
+  --qualy-chart-glass-glow:
+    0 18px 44px -10px rgba(2, 6, 23, 0.72),
+    0 0 32px -4px rgba(52, 211, 92, 0.30),
+    inset 0 1px 0 rgba(134, 239, 172, 0.28);
+  --qualy-grid-line: rgba(74, 222, 128, 0.08);
+
+  /* Tipografia & Tabelas */
+  --qualy-text: #eef3f8;
+  --qualy-text-muted: #94a3b8;
+  --qualy-table-head: #1c2838;
+  --qualy-table-hover: rgba(52, 211, 92, 0.06);
+  --qualy-code-bg: rgba(52, 211, 92, 0.13);
+  --qualy-code-color: #6ee79c;
+
+  /* Navbar profissional Dark */
+  --qualy-nav-bg: linear-gradient(135deg, #0c1420 0%, #112228 60%, #132d27 100%);
+  --qualy-nav-border: rgba(74, 222, 128, 0.28);
+
+  /* Overrides Bootstrap 5.3 */
+  --bs-primary: #34d35c;
+  --bs-primary-rgb: 52, 211, 92;
+  --bs-success: #22c55e;
+  --bs-success-rgb: 34, 197, 94;
+  --bs-info: #38bdf8;
+  --bs-info-rgb: 56, 189, 248;
+  --bs-link-color: #5ee682;
+  --bs-link-hover-color: #86efac;
+  --bs-body-bg: #0f1722;
+  --bs-body-color: #eef3f8;
+  --bs-secondary-color: #94a3b8;
+  --bs-tertiary-bg: #1c2838;
+  --bs-border-color: rgba(148, 163, 184, 0.16);
+  --bs-card-bg: #16202e;
+  --bs-card-cap-bg: #1b2737;
+}
+
+/* ==========================================================================
+   Base & Tipografia
+   ========================================================================== */
+
 body {
-  background: #f5f6f8;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--qualy-bg);
+  color: var(--qualy-text);
   min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.22s ease;
+}
+
+h1, h2, h3, h4, .h1, .h2, .h3, .h4, .qualy-display {
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  letter-spacing: -0.02em;
 }
 
 .login-page {
   max-width: 100%;
 }
 
-.card {
-  border: 1px solid rgba(0, 0, 0, .08);
-}
-
-.navbar-brand {
-  font-weight: 600;
-  letter-spacing: .02em;
-}
-
 code {
-  font-size: .9em;
+  font-size: 0.87em;
+  background: var(--qualy-code-bg);
+  color: var(--qualy-code-color);
+  padding: 0.14rem 0.42rem;
+  border-radius: 6px;
+}
+
+/* ==========================================================================
+   Navbar Oficial Grupo Qualy
+   ========================================================================== */
+
+.qualy-navbar {
+  background: var(--qualy-nav-bg);
+  border-bottom: 1px solid var(--qualy-nav-border);
+  box-shadow: 0 3px 16px rgba(2, 6, 23, 0.18);
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.navbar-brand.qualy-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #ffffff !important;
+}
+
+.qualy-brand-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.16rem 0.62rem;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #39d353 0%, #249b2f 100%);
+  color: #ffffff;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  box-shadow: 0 2px 12px rgba(47, 168, 54, 0.40);
+}
+
+.qualy-brand-sub {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(235, 245, 240, 0.84);
+}
+
+.qualy-navbar .nav-link {
+  color: rgba(226, 238, 245, 0.82) !important;
+  border-radius: 8px;
+  padding: 0.38rem 0.58rem !important;
+  font-size: 0.88rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.qualy-navbar .nav-link:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.qualy-navbar .nav-link.active {
+  color: #ffffff !important;
+  background: rgba(47, 168, 54, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(74, 222, 128, 0.45);
+}
+
+/* ==========================================================================
+   Botão de Modo Claro ↔ Modo Escuro (Ícone Circular Compacto e Visível)
+   ========================================================================== */
+
+.qualy-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(74, 222, 128, 0.55);
+  background: rgba(255, 255, 255, 0.12);
+  color: #e6f9ed;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.qualy-theme-toggle:hover {
+  transform: translateY(-1px);
+  background: rgba(74, 222, 128, 0.22);
+  border-color: #4ade80;
+  box-shadow: 0 0 14px rgba(74, 222, 128, 0.35);
+}
+
+[data-theme="dark"] .qualy-theme-toggle {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(251, 191, 36, 0.50);
+  color: #fbbf24;
+}
+
+[data-theme="dark"] .qualy-theme-toggle:hover {
+  background: rgba(251, 191, 36, 0.16);
+  border-color: #fbbf24;
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.32);
+}
+
+.qualy-theme-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.qualy-theme-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.qualy-theme-toggle-floating {
+  position: fixed;
+  top: 1.15rem;
+  right: 1.15rem;
+  z-index: 1050;
+  background: var(--qualy-surface);
+  color: var(--qualy-forest);
+  border-color: var(--qualy-border-strong);
+  box-shadow: var(--qualy-shadow);
+}
+
+[data-theme="dark"] .qualy-theme-toggle-floating {
+  background: var(--qualy-surface);
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.45);
+}
+
+.qualy-user-badge {
+  background: rgba(52, 211, 92, 0.18);
+  color: #86efac;
+  border: 1px solid rgba(74, 222, 128, 0.35);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+
+/* ==========================================================================
+   Botões, Cards Sólidos, Tabelas & Formulários (Profissionais e Amigáveis)
+   ========================================================================== */
+
+.btn-primary {
+  --bs-btn-bg: var(--qualy-green);
+  --bs-btn-border-color: var(--qualy-green);
+  --bs-btn-hover-bg: var(--qualy-green-hover);
+  --bs-btn-hover-border-color: var(--qualy-green-hover);
+  --bs-btn-active-bg: var(--qualy-green-hover);
+  --bs-btn-active-border-color: var(--qualy-green-hover);
+  --bs-btn-color: #ffffff;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+[data-theme="dark"] .btn-primary {
+  --bs-btn-color: #06210f;
+}
+
+.btn-qualy-glow {
+  background: linear-gradient(135deg, #2fa836 0%, #1ea85a 100%);
+  border: 1px solid #289b32;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px -3px rgba(47, 168, 54, 0.42);
+  transition: all 0.2s ease;
+}
+
+.btn-qualy-glow:hover {
+  background: linear-gradient(135deg, #34bf42 0%, #10b981 100%);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px -3px rgba(47, 168, 54, 0.55);
+}
+
+[data-theme="dark"] .btn-qualy-glow {
+  color: #041d0c;
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  border-color: #4ade80;
+}
+
+[data-theme="dark"] .btn-qualy-glow:hover {
+  color: #041d0c;
+  background: linear-gradient(135deg, #6ee79c 0%, #34d35c 100%);
+}
+
+.btn-qualy-glass {
+  background: var(--qualy-surface);
+  border: 1px solid var(--qualy-border-strong);
+  color: var(--qualy-text);
+  font-weight: 600;
+  border-radius: 10px;
+  transition: all 0.18s ease;
+}
+
+.btn-qualy-glass:hover {
+  border-color: var(--qualy-green);
+  background: var(--qualy-surface-alt);
+  color: var(--qualy-green);
+}
+
+/* Cards padrão: sólidos, nítidos e fáceis de ler */
+.card {
+  background: var(--qualy-surface);
+  border: 1px solid var(--qualy-border);
+  border-radius: 14px;
+  box-shadow: var(--qualy-shadow);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-header {
+  background: var(--qualy-surface-alt);
+  border-bottom: 1px solid var(--qualy-border);
+  border-top-left-radius: 14px !important;
+  border-top-right-radius: 14px !important;
+}
+
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-hover-bg: var(--qualy-table-hover);
+  --bs-table-border-color: var(--qualy-border);
+  color: var(--qualy-text);
+}
+
+.table > thead,
+.table-light {
+  --bs-table-bg: var(--qualy-table-head);
+  --bs-table-color: var(--qualy-text);
+  color: var(--qualy-text);
+}
+
+.list-group-item {
+  background: transparent;
+  color: var(--qualy-text);
+  border-color: var(--qualy-border);
+}
+
+.form-control,
+.form-select {
+  background-color: var(--qualy-surface-alt);
+  border-color: var(--qualy-border-strong);
+  color: var(--qualy-text);
+  border-radius: 10px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--qualy-green);
+  box-shadow: 0 0 0 0.2rem rgba(47, 168, 54, 0.20);
+  background-color: var(--qualy-surface);
+  color: var(--qualy-text);
+}
+
+/* ==========================================================================
+   Cabeçalho Hero & KPI Cards (Limpos, Sólidos, Corporativos)
+   ========================================================================== */
+
+.qualy-hero-bar {
+  position: relative;
+  overflow: hidden;
+  padding: 1.25rem 1.5rem;
+  border-radius: 16px;
+  background: var(--qualy-surface);
+  border: 1px solid var(--qualy-border);
+  box-shadow: var(--qualy-shadow);
+}
+
+.qualy-hero-bar::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--qualy-steel), var(--qualy-green), var(--qualy-green-mint));
+}
+
+.qualy-telemetry-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.22rem 0.68rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(47, 168, 54, 0.12);
+  color: var(--qualy-green);
+  border: 1px solid rgba(47, 168, 54, 0.28);
+}
+
+.qualy-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--qualy-green-neon);
+  box-shadow: 0 0 8px var(--qualy-green-neon);
+  animation: qualyPulse 2s infinite ease-in-out;
+}
+
+@keyframes qualyPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.8); }
+}
+
+/* KPI Cards: sólidos, legíveis, com acento futurista discreto no topo */
+.qualy-kpi-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--qualy-surface);
+  border: 1px solid var(--qualy-border);
+  box-shadow: var(--qualy-shadow);
+  padding: 1.05rem 1rem;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.qualy-kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--qualy-green);
+  box-shadow: var(--qualy-shadow-hover);
+}
+
+.qualy-kpi-value {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--qualy-green);
+}
+
+.qualy-kpi-value.kpi-danger {
+  color: #ef4444;
+}
+
+.qualy-kpi-value.kpi-steel {
+  color: var(--qualy-steel);
+}
+
+.qualy-kpi-value.kpi-amber {
+  color: #f59e0b;
+}
+
+.qualy-kpi-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--qualy-text-muted);
+  margin-top: 0.28rem;
+}
+
+/* ==========================================================================
+   APENAS OS GRÁFICOS — Efeito Vidro Translúcido Verde Futurista
+   ========================================================================== */
+
+.qualy-chart-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--qualy-chart-glass-bg);
+  border: 1px solid var(--qualy-chart-glass-border);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: var(--qualy-chart-glass-shadow);
+  transition: border-color 0.24s ease, box-shadow 0.24s ease, transform 0.24s ease;
+}
+
+/* Halo luminoso verde suave sob o vidro do gráfico */
+.qualy-chart-card::after {
+  content: "";
+  position: absolute;
+  top: -70px;
+  right: -60px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(52, 211, 92, 0.24) 0%, rgba(16, 185, 129, 0.08) 48%, transparent 72%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Grade futurista sutil no fundo do vidro do gráfico */
+.qualy-chart-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--qualy-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--qualy-grid-line) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse at 50% 45%, rgba(0, 0, 0, 0.8) 0%, transparent 82%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 45%, rgba(0, 0, 0, 0.8) 0%, transparent 82%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.qualy-chart-card:hover {
+  border-color: var(--qualy-chart-glass-border-hover);
+  box-shadow: var(--qualy-chart-glass-glow);
+}
+
+.qualy-chart-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.qualy-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  padding: 1rem 1.25rem 0.7rem;
+  border-bottom: 1px solid rgba(47, 168, 54, 0.18);
+  background: linear-gradient(90deg, rgba(52, 211, 92, 0.11), transparent 70%);
+}
+
+.qualy-chart-title {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-size: 0.98rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.qualy-chart-subtitle {
+  font-size: 0.76rem;
+  color: var(--qualy-text-muted);
+}
+
+.qualy-chart-body {
+  position: relative;
+  padding: 1rem 1.25rem 1.2rem;
+}
+
+.qualy-chart-canvas-wrap {
+  position: relative;
+  height: 285px;
+  width: 100%;
+}
+
+.qualy-chart-canvas-wrap.compact {
+  height: 240px;
+}
+
+.qualy-chart-canvas-wrap.mini {
+  height: 195px;
+}
+
+/* Segmented Control Interativo dos Gráficos */
+.qualy-seg-group {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(47, 168, 54, 0.22);
+  gap: 2px;
+}
+
+[data-theme="dark"] .qualy-seg-group {
+  background: rgba(15, 23, 34, 0.60);
+  border-color: rgba(74, 222, 128, 0.24);
+}
+
+.qualy-seg-btn {
+  border: none;
+  background: transparent;
+  color: var(--qualy-text-muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.28rem 0.68rem;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qualy-seg-btn:hover {
+  color: var(--qualy-text);
+}
+
+.qualy-seg-btn.active {
+  background: linear-gradient(135deg, #249b2f 0%, #15803d 100%);
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(34, 150, 62, 0.38);
+}
+
+[data-theme="dark"] .qualy-seg-btn.active {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.42), inset 0 0 0 1px rgba(134, 239, 172, 0.5);
+}
+
+/* HUD central do gráfico de rosca */
+.qualy-donut-hud {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -56%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.qualy-donut-hud-val {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-size: 1.65rem;
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--qualy-green);
+}
+
+[data-theme="dark"] .qualy-donut-hud-val {
+  color: #4ade80;
+  text-shadow: 0 0 14px rgba(74, 222, 128, 0.42);
+}
+
+.qualy-donut-hud-lbl {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--qualy-text-muted);
+  font-weight: 700;
+}
+
+/* Login Card Grupo Qualy (sólido, limpo e corporativo) */
+.qualy-login-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--qualy-surface);
+  border: 1px solid var(--qualy-border);
+  box-shadow: var(--qualy-shadow-hover);
+}
+
+.qualy-login-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--qualy-steel), var(--qualy-green), var(--qualy-green-mint));
+}
+
+/* Banner de simulação quando período está vazio */
+.qualy-sim-banner {
+  background: var(--qualy-surface);
+  border: 1px dashed rgba(47, 168, 54, 0.48);
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  font-size: 0.84rem;
+}
+
+/* ==========================================================================
+   Modo Escuro para Mapa Leaflet
+   ========================================================================== */
+
+[data-theme="dark"] .leaflet-tile-pane {
+  filter: invert(100%) hue-rotate(180deg) brightness(92%) contrast(90%) saturate(85%);
+}
+
+[data-theme="dark"] .leaflet-control-attribution {
+  background: rgba(15, 23, 34, 0.88) !important;
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .leaflet-popup-content-wrapper,
+[data-theme="dark"] .leaflet-popup-tip {
+  background: #16202e;
+  color: #eef3f8;
+  border: 1px solid rgba(74, 222, 128, 0.35);
+}
+
+/* ==========================================================================
+   Impressão (preserva layout limpo para /rotas/<id>/imprimir)
+   ========================================================================== */
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .qualy-navbar,
+  .qualy-theme-toggle {
+    display: none !important;
+  }
+  .card,
+  .qualy-chart-card,
+  .qualy-kpi-card {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    background: #ffffff !important;
+    border-color: #cccccc !important;
+  }
 }

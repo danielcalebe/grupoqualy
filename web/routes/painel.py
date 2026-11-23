@@ -1,10 +1,13 @@
 """Painel principal (home) — KPIs mínimos na F1, expandido em F6."""
 from __future__ import annotations
 
+from datetime import datetime, timedelta
+
 from flask import Blueprint, g, render_template
 
 from core.auth import login_required
 from core.db import get_db
+from services.indicadores import obter_series_graficos
 
 bp_painel = Blueprint("painel", __name__, url_prefix="")
 
@@ -38,10 +41,17 @@ def home():
         LIMIT 8
         """
     )
+    hoje_dt = datetime.now().date()
+    series_7d = obter_series_graficos(
+        db,
+        de=(hoje_dt - timedelta(days=6)).isoformat(),
+        ate=hoje_dt.isoformat(),
+    )
     return render_template(
         "painel/home.html",
         kpis=hoje or {},
         alertas=alertas,
         ultimas=ultimas,
+        series_7d=series_7d,
         usuario=g.usuario,
     )
