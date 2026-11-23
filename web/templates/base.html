@@ -22,6 +22,8 @@
         <li class="nav-item"><a class="nav-link" href="{{ url_for('rotas.index') }}">Rotas</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('operacao.painel') }}">Operação</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('tickets.busca') }}">Tíquetes</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('relatorios.index') }}">Indicadores</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('alertas.index') }}">Alertas</a></li>
         {% if usuario and usuario.pode('cadastros') %}
         <li class="nav-item"><a class="nav-link" href="{{ url_for('cadastros.index') }}">Cadastros</a></li>
         {% endif %}

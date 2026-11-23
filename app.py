@@ -47,6 +47,7 @@ def create_app(db_path=None) -> Flask:
     from web.routes.rotas import bp_rotas
     from web.routes.operacao import bp_operacao
     from web.routes.tickets import bp_tickets
+    from web.routes.relatorios import bp_relatorios, bp_alertas, bp_api
 
     app.register_blueprint(bp_auth)
     app.register_blueprint(bp_painel)
@@ -55,6 +56,9 @@ def create_app(db_path=None) -> Flask:
     app.register_blueprint(bp_rotas)
     app.register_blueprint(bp_operacao)
     app.register_blueprint(bp_tickets)
+    app.register_blueprint(bp_relatorios)
+    app.register_blueprint(bp_alertas)
+    app.register_blueprint(bp_api)
 
     @app.route("/api/health")
     def health():
