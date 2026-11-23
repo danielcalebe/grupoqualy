@@ -36,13 +36,24 @@ def index():
         return redirect(url_for("painel.home"))
     de = request.args.get("de") or ""
     ate = request.args.get("ate") or ""
+    status_filtro = (request.args.get("status") or "").strip()
     db = get_db()
     svc_alertas.rodar_motor_alertas(db)
     kpis = svc_ind.calcular_indicadores(db, de or None, ate or None)
+    series = svc_ind.obter_series_graficos(db, kpis["periodo_de"], kpis["periodo_ate"])
+    _, _, detalhadas = svc_ind.listar_coletas_detalhadas(
+        db, kpis["periodo_de"], kpis["periodo_ate"], status=status_filtro or None
+    )
     return render_template(
         "relatorios/index.html",
         kpis=kpis,
-        filtros={"de": kpis["periodo_de"], "ate": kpis["periodo_ate"]},
+        series=series,
+        coletas_detalhadas=detalhadas,
+        filtros={
+            "de": kpis["periodo_de"],
+            "ate": kpis["periodo_ate"],
+            "status": status_filtro,
+        },
         usuario=g.usuario,
         csrf=_cs(),
     )
@@ -76,6 +87,106 @@ def csv_export():
 
     dados = buf.getvalue().encode("utf-8-sig")
     nome = f"indicadores_{kpis['periodo_de']}_{kpis['periodo_ate']}.csv"
+    return Response(
+        dados,
+        mimetype="text/csv; charset=utf-8",
+        headers={"Content-Disposition": f"attachment; filename={nome}"},
+    )
+
+
+@bp_relatorios.route("/csv/detalhado")
+@login_required
+def csv_export_detalhado():
+    if not _pode_ver_indicadores():
+        flash("Sem permissão.", "danger")
+        return redirect(url_for("painel.home"))
+    de = request.args.get("de") or None
+    ate = request.args.get("ate") or None
+    status_filtro = (request.args.get("status") or "").strip() or None
+    de_res, ate_res, rows = svc_ind.listar_coletas_detalhadas(
+        get_db(), de, ate, status=status_filtro
+    )
+
+    colunas = [
+        "codigo",
+        "status",
+        "urgente",
+        "data_prevista_inicio",
+        "data_prevista_fim",
+        "data_real_saida",
+        "data_real_chegada",
+        "tempo_execucao_min",
+        "fornecedor",
+        "fornecedor_cnpj",
+        "ponto_coleta",
+        "bairro",
+        "cidade",
+        "uf",
+        "veiculo_placa",
+        "veiculo_tipo",
+        "tipo_veiculo_necessario",
+        "motorista",
+        "peso_estimado_kg",
+        "peso_real_kg",
+        "divergencia_peso_pct",
+        "numero_ticket",
+        "peso_liquido_ticket_kg",
+        "data_hora_descarregamento",
+        "rota_diaria_id",
+        "ordem_na_rota",
+        "origem",
+        "observacoes",
+        "motivo_cancelamento",
+    ]
+
+    def _fmt(v):
+        if v is None:
+            return ""
+        if isinstance(v, float):
+            return f"{v:.2f}"
+        return str(v)
+
+    buf = io.StringIO()
+    w = csv.writer(buf, delimiter=";")
+    w.writerow(colunas)
+    for r in rows:
+        w.writerow(
+            [
+                _fmt(r.get("codigo")),
+                _fmt(r.get("status")),
+                "Sim" if r.get("urgente") else "Não",
+                _fmt(r.get("data_hora_prevista_inicio")),
+                _fmt(r.get("data_hora_prevista_fim")),
+                _fmt(r.get("data_hora_real_saida")),
+                _fmt(r.get("data_hora_real_chegada")),
+                _fmt(r.get("tempo_execucao_minutos")),
+                _fmt(r.get("fornecedor")),
+                _fmt(r.get("fornecedor_cnpj")),
+                _fmt(r.get("ponto_coleta")),
+                _fmt(r.get("bairro")),
+                _fmt(r.get("cidade")),
+                _fmt(r.get("uf")),
+                _fmt(r.get("veiculo_placa")),
+                _fmt(r.get("veiculo_tipo")),
+                _fmt(r.get("tipo_veiculo_necessario")),
+                _fmt(r.get("motorista")),
+                _fmt(r.get("peso_estimado_kg")),
+                _fmt(r.get("peso_real_kg")),
+                _fmt(r.get("divergencia_peso_pct")),
+                _fmt(r.get("numero_ticket")),
+                _fmt(r.get("peso_liquido_ticket_kg")),
+                _fmt(r.get("data_hora_descarregamento")),
+                _fmt(r.get("rota_diaria_id")),
+                _fmt(r.get("ordem_na_rota")),
+                _fmt(r.get("origem")),
+                _fmt(r.get("observacoes")),
+                _fmt(r.get("motivo_cancelamento")),
+            ]
+        )
+
+    dados = buf.getvalue().encode("utf-8-sig")
+    sufixo = f"_{status_filtro}" if status_filtro else ""
+    nome = f"coletas_detalhado_{de_res}_{ate_res}{sufixo}.csv"
     return Response(
         dados,
         mimetype="text/csv; charset=utf-8",
@@ -133,6 +244,16 @@ def api_indicadores():
     de = request.args.get("de")
     ate = request.args.get("ate")
     return jsonify(svc_ind.calcular_indicadores(get_db(), de, ate))
+
+
+@bp_api.route("/indicadores/series")
+@login_required
+def api_indicadores_series():
+    if not _pode_ver_indicadores():
+        return jsonify({"erro": "Sem permissão."}), 403
+    de = request.args.get("de")
+    ate = request.args.get("ate")
+    return jsonify(svc_ind.obter_series_graficos(get_db(), de, ate))
 
 
 @bp_api.route("/alertas")
