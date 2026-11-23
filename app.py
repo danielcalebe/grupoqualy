@@ -78,5 +78,11 @@ def create_app(db_path=None) -> Flask:
 
 
 if __name__ == "__main__":
+    import os
+
     application = create_app()
-    application.run(host="127.0.0.1", port=5000, debug=DEBUG)
+    application.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000)),
+        debug=DEBUG,
+    )
